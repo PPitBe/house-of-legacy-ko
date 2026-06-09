@@ -99,21 +99,20 @@
     <h2><span class="ico">📖</span> 설치 방법</h2>
     <ol class="steps">
       <li>Steam에서 게임을 <b>완전히 종료</b>합니다.</li>
-      <li>위에서 받은 zip의 압축을 풀고, 안의 <code>House of Legacy_Data</code> 폴더를
-          <b>게임 설치 폴더에 덮어쓰기</b>로 복사합니다.<br>
+      <li>받은 zip의 압축을 풀고, 안의 <b>모든 항목</b>(<code>winhttp.dll</code>, <code>BepInEx</code> 폴더 등)을
+          <b>게임 설치 폴더</b>(<code>House of Legacy.exe</code> 가 있는 폴더)에 복사합니다.<br>
           <span class="vsub">게임 폴더 찾기: Steam → 라이브러리 → House of Legacy 우클릭 → 관리 → 로컬 파일 보기</span>
-        <div class="files">교체/추가되는 파일:
-House of Legacy_Data\Managed\Assembly-CSharp.dll   (교체)
-House of Legacy_Data\Managed\KoJosa.dll            (추가: 조사 보정)
-House of Legacy_Data\resources.assets
-House of Legacy_Data\level2
-House of Legacy_Data\level3</div>
+        <div class="files">※ 게임 원본 파일은 덮어쓰지 않고 아래만 추가됩니다:
+winhttp.dll
+doorstop_config.ini
+BepInEx\  (폴더)</div>
       </li>
       <li>게임 실행 → <b>설정 → 언어(语言)</b>를 <code>한글</code>로 변경하면 한국어로 표시됩니다.
-          <span class="vsub">("English"를 고르면 원래 영어로 나옵니다.)</span></li>
+          <span class="vsub">첫 실행은 초기화로 수십 초 더 걸릴 수 있습니다.</span></li>
     </ol>
-    <div class="warn">⚠ 패치는 <b>표시 버전이 맞는 게임</b>에만 적용하세요(버전이 다르면 파일이 깨질 수 있음).
-      원복은 <b>Steam → 속성 → 설치된 파일 → 게임 파일 무결성 확인</b>으로 가능합니다.</div>
+    <div class="warn">🛡 게임 <b>원본 파일을 전혀 수정하지 않습니다</b>(실행 시 메모리에서 한국어 적용).
+      제거하려면 게임 폴더에서 <code>winhttp.dll</code> 과 <code>BepInEx</code> 폴더만 지우면 됩니다.
+      일부 백신이 <code>winhttp.dll</code>(오픈소스 모드 로더 BepInEx)을 오탐할 수 있습니다.</div>
   </section>
 
   <!-- ===== 이전 버전 ===== -->
