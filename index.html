@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>오금유세가(吾今有世家) 한국어 패치</title>
+<meta name="description" content="House of Legacy (吾今有世家) 비공식 한국어 번역 패치 — 다운로드 및 설치 안내" />
+<!-- 오픈그래프(카톡/디스코드 공유 미리보기) -->
+<meta property="og:title" content="오금유세가 한국어 패치" />
+<meta property="og:description" content="House of Legacy (吾今有世家) 비공식 한국어 번역 패치 다운로드" />
+<meta property="og:type" content="website" />
+<style>
+  :root{
+    --bg:#efe2c4; --panel:#f6eed7; --panel2:#ece0c0; --ink:#4b2f1e; --ink2:#7a5638;
+    --line:#c8a86f; --accent:#b8472f; --accent2:#a23a25; --gold:#c89b3c; --shadow:rgba(75,47,30,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    background:var(--bg);
+    background-image:radial-gradient(circle at 20% 10%,#f7eed6 0,transparent 60%),radial-gradient(circle at 80% 90%,#e7d6ad 0,transparent 55%);
+    color:var(--ink); line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:28px 18px 64px}
+  header.top{text-align:center;padding:26px 0 12px}
+  header.top h1{margin:0;font-size:30px;letter-spacing:-.5px;color:var(--accent)}
+  header.top .zh{font-size:15px;color:var(--ink2);margin-top:4px}
+  header.top .sub{font-size:13px;color:var(--ink2);margin-top:10px}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:18px 0}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin:18px 0;box-shadow:0 6px 18px var(--shadow)}
+  .card h2{margin:0 0 14px;font-size:18px;color:var(--accent);display:flex;align-items:center;gap:8px}
+  .card h2 .ico{font-size:18px}
+
+  /* 최신버전 hero */
+  .latest{background:linear-gradient(180deg,#f8f0da,#f0e4c6);border:1.5px solid var(--gold)}
+  .badgerow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+  .badge{display:inline-flex;align-items:center;gap:6px;background:#fff7e6;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px}
+  .badge b{color:var(--accent)}
+  .meta{font-size:13px;color:var(--ink2);margin:8px 0 16px}
+  .meta span{margin-right:14px;white-space:nowrap}
+  .dlbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--accent);color:#fff;text-decoration:none;font-weight:700;font-size:16px;
+    padding:13px 26px;border-radius:10px;border:none;cursor:pointer;transition:.15s;box-shadow:0 4px 0 var(--accent2)}
+  .dlbtn:hover{transform:translateY(-1px);box-shadow:0 5px 0 var(--accent2)}
+  .dlbtn:active{transform:translateY(2px);box-shadow:0 2px 0 var(--accent2)}
+  .notes{margin-top:14px;font-size:13.5px;color:var(--ink2);white-space:pre-wrap;background:#fbf5e4;border:1px dashed var(--line);border-radius:8px;padding:12px 14px;max-height:220px;overflow:auto}
+
+  /* 이전버전 */
+  .vlist{list-style:none;margin:0;padding:0}
+  .vlist li{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:11px 4px;border-bottom:1px dashed var(--line)}
+  .vlist li:last-child{border-bottom:none}
+  .vlist .vinfo{font-size:14px}
+  .vlist .vinfo .vt{font-weight:700}
+  .vlist .vinfo .vsub{font-size:12px;color:var(--ink2)}
+  .vlist a.mini{background:#fff7e6;border:1px solid var(--line);color:var(--ink);text-decoration:none;
+    padding:7px 14px;border-radius:8px;font-size:13px;white-space:nowrap}
+  .vlist a.mini:hover{background:#fce9c8}
+
+  /* 설치방법 */
+  ol.steps{margin:0;padding-left:20px}
+  ol.steps li{margin:10px 0}
+  code,.kbd{background:#e9dab6;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:13px;font-family:Consolas,monospace}
+  .files{background:#fbf5e4;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:10px 0;font-family:Consolas,monospace;font-size:13px;color:var(--ink2)}
+  .warn{background:#fbe7df;border:1px solid #e0a292;border-radius:8px;padding:10px 14px;font-size:13.5px;color:#8a2f1c;margin:10px 0}
+
+  .linkrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+  .linkbtn{display:inline-flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);
+    color:var(--ink);text-decoration:none;padding:11px 18px;border-radius:10px;font-size:14px;font-weight:600}
+  .linkbtn:hover{background:#e4d3a8}
+  .linkbtn.gh{background:#24292f;color:#fff;border-color:#24292f}
+  .linkbtn.gh:hover{background:#3a4048}
+
+  footer{text-align:center;font-size:12px;color:var(--ink2);margin-top:30px;line-height:1.8}
+  .loading,.errbox{text-align:center;color:var(--ink2);padding:20px}
+  .errbox a{color:var(--accent)}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>오금유세가 한국어 패치</h1>
+    <div class="zh">House&nbsp;of&nbsp;Legacy &nbsp;·&nbsp; 吾今有世家</div>
+    <div class="sub">비공식 팬 번역 패치</div>
+  </header>
+
+  <!-- ===== 최신 버전 ===== -->
+  <section class="card latest" id="latestCard">
+    <h2><span class="ico">⬇</span> 최신 버전</h2>
+    <div id="latestBody"><div class="loading">버전 정보를 불러오는 중…</div></div>
+  </section>
+
+  <!-- ===== 설치 방법 ===== -->
+  <section class="card">
+    <h2><span class="ico">📖</span> 설치 방법</h2>
+    <ol class="steps">
+      <li>Steam에서 게임을 <b>완전히 종료</b>합니다.</li>
+      <li>위에서 받은 zip의 압축을 풀고, 안의 <code>House of Legacy_Data</code> 폴더를
+          <b>게임 설치 폴더에 덮어쓰기</b>로 복사합니다.<br>
+          <span class="vsub">게임 폴더 찾기: Steam → 라이브러리 → House of Legacy 우클릭 → 관리 → 로컬 파일 보기</span>
+        <div class="files">교체/추가되는 파일:
+House of Legacy_Data\Managed\Assembly-CSharp.dll   (교체)
+House of Legacy_Data\Managed\KoJosa.dll            (추가: 조사 보정)
+House of Legacy_Data\resources.assets
+House of Legacy_Data\level2
+House of Legacy_Data\level3</div>
+      </li>
+      <li>게임 실행 → <b>설정 → 언어(语言)</b>를 <code>한글</code>로 변경하면 한국어로 표시됩니다.
+          <span class="vsub">("English"를 고르면 원래 영어로 나옵니다.)</span></li>
+    </ol>
+    <div class="warn">⚠ 패치는 <b>표시 버전이 맞는 게임</b>에만 적용하세요(버전이 다르면 파일이 깨질 수 있음).
+      원복은 <b>Steam → 속성 → 설치된 파일 → 게임 파일 무결성 확인</b>으로 가능합니다.</div>
+  </section>
+
+  <!-- ===== 이전 버전 ===== -->
+  <section class="card">
+    <h2><span class="ico">🗂</span> 이전 버전</h2>
+    <div id="prevBody"><div class="loading">불러오는 중…</div></div>
+  </section>
+
+  <!-- ===== 링크 ===== -->
+  <section class="card">
+    <h2><span class="ico">🔗</span> 링크</h2>
+    <div class="linkrow">
+      <a class="linkbtn gh" id="ghLink" href="#" target="_blank" rel="noopener">📦 GitHub 저장소</a>
+      <a class="linkbtn" id="inquiryLink" href="#" target="_blank" rel="noopener">💬 문의하기</a>
+    </div>
+  </section>
+
+  <footer>
+    비공식 팬 번역 패치입니다. 원작 저작권은 成都焕艺科技有限公司에 있습니다.<br>
+    게임을 구매해 즐겨주세요.
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   ▼▼▼  여기 3개만 본인 정보로 바꾸세요  ▼▼▼
+   ============================================================ */
+const CONFIG = {
+  owner: "PPitBe",                 // GitHub 사용자명
+  repo:  "house-of-legacy-ko",     // 저장소 이름
+  inquiryUrl: ""                   // 문의 링크 (게시글/디스코드 등) — 비워두면 버튼 숨김
+};
+/* ============================================================
+   ▲▲▲  아래는 수정 불필요  ▲▲▲
+   ============================================================ */
+
+const RELEASES_API = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/releases`;
+const RELEASES_WEB = `https://github.com/${CONFIG.owner}/${CONFIG.repo}/releases`;
+const CACHE_KEY = "hol_releases_cache_v1";
+const CACHE_MIN = 10;
+
+function fmtDate(s){ if(!s) return ""; const d=new Date(s);
+  return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`; }
+function fmtSize(b){ if(!b) return ""; const mb=b/1048576; return (mb>=1?mb.toFixed(1)+" MB":(b/1024).toFixed(0)+" KB"); }
+function pickAsset(rel){
+  if(!rel.assets||!rel.assets.length) return null;
+  return rel.assets.find(a=>/\.zip$/i.test(a.name)) || rel.assets[0];
+}
+function gameVer(rel){
+  const m=(rel.body||"").match(/게임\s*버전[:：]\s*(.+)/);
+  return m? m[1].trim() : null;
+}
+function esc(s){ return (s||"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+function render(releases){
+  // 드래프트 제외
+  releases = releases.filter(r=>!r.draft);
+  const ghLink=document.getElementById("ghLink"); ghLink.href=RELEASES_WEB;
+  const inq=document.getElementById("inquiryLink");
+  if(CONFIG.inquiryUrl){ inq.href=CONFIG.inquiryUrl; } else { inq.classList.add("hidden"); }
+
+  if(!releases.length){ showError("아직 등록된 릴리스가 없습니다."); return; }
+
+  // 최신
+  const latest = releases[0];
+  const a = pickAsset(latest);
+  const gv = gameVer(latest);
+  document.getElementById("latestBody").innerHTML = `
+    <div class="badgerow">
+      <span class="badge">번역 버전 <b>${esc(latest.tag_name)}</b></span>
+      ${gv?`<span class="badge">게임 버전 <b>${esc(gv)}</b></span>`:""}
+      ${latest.prerelease?`<span class="badge" style="border-color:#b8472f"><b>사전배포</b></span>`:""}
+    </div>
+    <div class="meta">
+      <span>📅 ${fmtDate(latest.published_at)}</span>
+      ${a?`<span>💾 ${fmtSize(a.size)}</span>`:""}
+      ${a&&a.download_count?`<span>⬇ ${a.download_count.toLocaleString()}회</span>`:""}
+    </div>
+    ${a?`<a class="dlbtn" href="${a.browser_download_url}">⬇ 최신 버전 다운로드</a>`
+        :`<a class="dlbtn" href="${RELEASES_WEB}" target="_blank">릴리스 페이지에서 받기</a>`}
+    ${latest.body?`<div class="notes">${esc(latest.body)}</div>`:""}
+  `;
+
+  // 이전
+  const prev = releases.slice(1);
+  const pb=document.getElementById("prevBody");
+  if(!prev.length){ pb.innerHTML=`<div class="loading">이전 버전이 없습니다.</div>`; return; }
+  pb.innerHTML = `<ul class="vlist">${prev.map(r=>{
+    const pa=pickAsset(r); const pv=gameVer(r);
+    return `<li>
+      <div class="vinfo">
+        <span class="vt">${esc(r.tag_name)}</span>
+        <span class="vsub">· ${fmtDate(r.published_at)}${pv?` · 게임 ${esc(pv)}`:""}${pa?` · ${fmtSize(pa.size)}`:""}</span>
+      </div>
+      ${pa?`<a class="mini" href="${pa.browser_download_url}">다운로드</a>`
+          :`<a class="mini" href="${RELEASES_WEB}" target="_blank">받기</a>`}
+    </li>`;
+  }).join("")}</ul>`;
+}
+
+function showError(msg){
+  const html=`<div class="errbox">${esc(msg)}<br><br>
+    <a href="${RELEASES_WEB}" target="_blank" rel="noopener">👉 GitHub 릴리스 페이지에서 직접 받기</a></div>`;
+  document.getElementById("latestBody").innerHTML=html;
+  document.getElementById("prevBody").innerHTML="";
+  document.getElementById("ghLink").href=RELEASES_WEB;
+  const inq=document.getElementById("inquiryLink");
+  if(CONFIG.inquiryUrl){inq.href=CONFIG.inquiryUrl;} else {inq.classList.add("hidden");}
+}
+
+(function init(){
+  if(CONFIG.owner==="YOUR_GITHUB_ID"||CONFIG.repo==="YOUR_REPO_NAME"){
+    showError("⚙ 설정 필요: index.html 상단 CONFIG의 owner/repo를 본인 GitHub 정보로 바꿔주세요.");
+    return;
+  }
+  // 캐시
+  try{
+    const c=JSON.parse(localStorage.getItem(CACHE_KEY)||"null");
+    if(c && (Date.now()-c.t)<CACHE_MIN*60000){ render(c.d); return; }
+  }catch(e){}
+  fetch(RELEASES_API,{headers:{"Accept":"application/vnd.github+json"}})
+    .then(r=>{ if(!r.ok) throw new Error("status "+r.status); return r.json(); })
+    .then(data=>{
+      try{ localStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),d:data})); }catch(e){}
+      render(data);
+    })
+    .catch(err=>{
+      // 캐시 폴백
+      try{ const c=JSON.parse(localStorage.getItem(CACHE_KEY)||"null"); if(c){ render(c.d); return; } }catch(e){}
+      showError("버전 정보를 불러오지 못했습니다(네트워크 또는 GitHub 요청 한도).");
+    });
+})();
+</script>
+</body>
+</html>
