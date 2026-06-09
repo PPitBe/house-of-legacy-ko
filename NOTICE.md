@@ -3,7 +3,7 @@
 본 저장소는 게임 **House of Legacy (吾今有世家)** 의 **비공식 한국어 번역 패치**를 배포합니다.
 
 ## 저작권
-- 게임 본편 및 그 안의 모든 텍스트·이미지·리소스의 저작권은 원저작권자 **成都焕艺科技有限公司**(Chengdu Huanyi Technology Co., Ltd.)에게 있습니다.
+- 게임 본편 및 그 안의 모든 텍스트·이미지·리소스의 저작권은 개발사 **S3 Studio**(成都焕艺科技有限公司) 및 발행사 **Thermite Games**에 있습니다. © 2025 Thermite Games. All Rights Reserved.
 - 본 패치는 원문을 한국어로 옮긴 **2차적 저작물**이며, 원작의 권리를 대체하거나 그에 대한 권리를 주장하지 않습니다.
 - 게임을 정식으로 구매한 이용자만 사용하시기 바랍니다.
 
@@ -22,6 +22,6 @@
 ---
 
 This is an **unofficial, non-commercial fan Korean translation** of *House of Legacy (吾今有世家)*.
-All rights to the original game and its assets belong to **成都焕艺科技有限公司**.
+All rights to the original game and its assets belong to the developer **S3 Studio** (Chengdu Huanyi Technology Co., Ltd.) and the publisher **Thermite Games**. © 2025 Thermite Games.
 Free non-commercial redistribution is allowed; selling is prohibited.
 The relevant files will be removed promptly upon the rights holder's request.
