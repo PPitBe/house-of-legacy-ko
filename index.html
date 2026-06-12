@@ -45,6 +45,10 @@
   .card h2{margin:0 0 14px;font-size:18px;color:var(--accent);display:flex;align-items:center;gap:8px}
   .card h2 .ico{font-size:18px}
 
+  /* 최신/사전배포 한 줄 배치 (좁으면 자동 줄바꿈) */
+  .toprow{display:flex;gap:18px;align-items:stretch;flex-wrap:wrap}
+  .toprow .card{flex:1 1 300px;min-width:0}
+
   /* 최신버전 hero */
   .latest{background:linear-gradient(180deg,#f8f0da,#f0e4c6);border:1.5px solid var(--gold)}
 
@@ -55,6 +59,12 @@
   .dlbtn.pre:active{box-shadow:0 2px 0 #a37f2e}
   .pretag{display:inline-block;background:#fbe7df;border:1px solid #e0a292;color:#8a2f1c;border-radius:999px;padding:1px 8px;font-size:11px;margin-left:6px;vertical-align:1px}
   .prenote{font-size:13px;color:var(--ink2);margin:0 0 14px}
+
+  /* 이전 버전: 정식/사전배포 2열 */
+  .prevcols{display:flex;gap:22px;flex-wrap:wrap}
+  .prevcol{flex:1 1 280px;min-width:0}
+  .prevhead{font-weight:700;font-size:14px;color:var(--accent);padding-bottom:7px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+  .prevempty{font-size:13px;color:var(--ink2);padding:10px 2px}
   .badgerow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px}
   .badge{display:inline-flex;align-items:center;gap:6px;background:#fff7e6;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px}
   .badge b{color:var(--accent)}
@@ -108,17 +118,17 @@
     <div class="sub">비공식 팬 번역 패치</div>
   </header>
 
-  <!-- ===== 최신 버전 (정식) ===== -->
-  <section class="card latest" id="latestCard">
-    <h2><span class="ico">⬇</span> 최신 버전</h2>
-    <div id="latestBody"><div class="loading">버전 정보를 불러오는 중…</div></div>
-  </section>
-
-  <!-- ===== 사전배포(검토중) 버전 ===== -->
-  <section class="card prerel hidden" id="preCard">
-    <h2><span class="ico">🧪</span> 사전배포 버전 (검토중)</h2>
-    <div id="preBody"></div>
-  </section>
+  <!-- ===== 최신 버전 (정식) + 사전배포(검토중) — 한 줄 배치 ===== -->
+  <div class="toprow">
+    <section class="card latest" id="latestCard">
+      <h2><span class="ico">⬇</span> 최신 버전</h2>
+      <div id="latestBody"><div class="loading">버전 정보를 불러오는 중…</div></div>
+    </section>
+    <section class="card prerel hidden" id="preCard">
+      <h2><span class="ico">🧪</span> 사전배포 버전 (검토중)</h2>
+      <div id="preBody"></div>
+    </section>
+  </div>
 
   <!-- ===== 설치 방법 ===== -->
   <section class="card">
@@ -252,22 +262,30 @@ function render(releases){
     pc.classList.add("hidden");
   }
 
-  // 이전 버전 (위 두 카드에 표시된 것 제외)
+  // 이전 버전 (위 두 카드에 표시된 것 제외) — 정식/사전배포 분리
   const shownIds = new Set([stable&&stable.id, pre&&pre.id].filter(Boolean));
   const prev = releases.filter(r=>!shownIds.has(r.id));
   const pb=document.getElementById("prevBody");
   if(!prev.length){ pb.innerHTML=`<div class="loading">이전 버전이 없습니다.</div>`; return; }
-  pb.innerHTML = `<ul class="vlist">${prev.map(r=>{
+  const item = r=>{
     const pa=pickAsset(r); const pv=gameVer(r);
     return `<li>
       <div class="vinfo">
-        <span class="vt">${esc(r.tag_name)}</span>${r.prerelease?`<span class="pretag">사전배포</span>`:""}
+        <span class="vt">${esc(r.tag_name)}</span>
         <span class="vsub">· ${fmtDate(r.published_at)}${pv?` · 게임 ${esc(pv)}`:""}${pa?` · ${fmtSize(pa.size)}`:""}</span>
       </div>
       ${pa?`<a class="mini" href="${pa.browser_download_url}">다운로드</a>`
           :`<a class="mini" href="${RELEASES_WEB}" target="_blank">받기</a>`}
     </li>`;
-  }).join("")}</ul>`;
+  };
+  const col = (title,list)=>`<div class="prevcol">
+    <div class="prevhead">${title}</div>
+    ${list.length?`<ul class="vlist">${list.map(item).join("")}</ul>`:`<div class="prevempty">없음</div>`}
+  </div>`;
+  pb.innerHTML = `<div class="prevcols">
+    ${col("정식 버전", prev.filter(r=>!r.prerelease))}
+    ${col("사전배포 버전", prev.filter(r=>r.prerelease))}
+  </div>`;
 }
 
 function showError(msg){
