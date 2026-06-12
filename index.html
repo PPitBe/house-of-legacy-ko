@@ -177,8 +177,7 @@ const CONFIG = {
 
 const RELEASES_API = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/releases`;
 const RELEASES_WEB = `https://github.com/${CONFIG.owner}/${CONFIG.repo}/releases`;
-const CACHE_KEY = "hol_releases_cache_v1";
-const CACHE_MIN = 10;
+const CACHE_KEY = "hol_releases_cache_v2";
 
 function fmtDate(s){ if(!s) return ""; const d=new Date(s);
   return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`; }
@@ -287,21 +286,21 @@ function showError(msg){
     showError("⚙ 설정 필요: index.html 상단 CONFIG의 owner/repo를 본인 GitHub 정보로 바꿔주세요.");
     return;
   }
-  // 캐시
+  // 캐시는 "첫 화면 빠른 표시 + 오프라인 폴백"용으로만 사용하고,
+  // 항상 최신 데이터를 새로 받아 다시 그린다(새로고침만으로 즉시 갱신되도록).
+  let painted=false;
   try{
     const c=JSON.parse(localStorage.getItem(CACHE_KEY)||"null");
-    if(c && (Date.now()-c.t)<CACHE_MIN*60000){ render(c.d); return; }
+    if(c && c.d){ render(c.d); painted=true; }
   }catch(e){}
-  fetch(RELEASES_API,{headers:{"Accept":"application/vnd.github+json"}})
+  fetch(RELEASES_API,{headers:{"Accept":"application/vnd.github+json"},cache:"no-store"})
     .then(r=>{ if(!r.ok) throw new Error("status "+r.status); return r.json(); })
     .then(data=>{
       try{ localStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),d:data})); }catch(e){}
       render(data);
     })
     .catch(err=>{
-      // 캐시 폴백
-      try{ const c=JSON.parse(localStorage.getItem(CACHE_KEY)||"null"); if(c){ render(c.d); return; } }catch(e){}
-      showError("버전 정보를 불러오지 못했습니다(네트워크 또는 GitHub 요청 한도).");
+      if(!painted) showError("버전 정보를 불러오지 못했습니다(네트워크 또는 GitHub 요청 한도).");
     });
 })();
 </script>
