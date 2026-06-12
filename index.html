@@ -47,6 +47,14 @@
 
   /* 최신버전 hero */
   .latest{background:linear-gradient(180deg,#f8f0da,#f0e4c6);border:1.5px solid var(--gold)}
+
+  /* 사전배포(검토중) 카드 */
+  .prerel{border:1.5px dashed var(--accent);background:#fbf2e0}
+  .dlbtn.pre{background:var(--gold);box-shadow:0 4px 0 #a37f2e}
+  .dlbtn.pre:hover{box-shadow:0 5px 0 #a37f2e}
+  .dlbtn.pre:active{box-shadow:0 2px 0 #a37f2e}
+  .pretag{display:inline-block;background:#fbe7df;border:1px solid #e0a292;color:#8a2f1c;border-radius:999px;padding:1px 8px;font-size:11px;margin-left:6px;vertical-align:1px}
+  .prenote{font-size:13px;color:var(--ink2);margin:0 0 14px}
   .badgerow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px}
   .badge{display:inline-flex;align-items:center;gap:6px;background:#fff7e6;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px}
   .badge b{color:var(--accent)}
@@ -100,10 +108,16 @@
     <div class="sub">비공식 팬 번역 패치</div>
   </header>
 
-  <!-- ===== 최신 버전 ===== -->
+  <!-- ===== 최신 버전 (정식) ===== -->
   <section class="card latest" id="latestCard">
     <h2><span class="ico">⬇</span> 최신 버전</h2>
     <div id="latestBody"><div class="loading">버전 정보를 불러오는 중…</div></div>
+  </section>
+
+  <!-- ===== 사전배포(검토중) 버전 ===== -->
+  <section class="card prerel hidden" id="preCard">
+    <h2><span class="ico">🧪</span> 사전배포 버전 (검토중)</h2>
+    <div id="preBody"></div>
   </section>
 
   <!-- ===== 설치 방법 ===== -->
@@ -179,6 +193,20 @@ function gameVer(rel){
 }
 function esc(s){ return (s||"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
 
+function relInfo(rel){
+  const a=pickAsset(rel), gv=gameVer(rel);
+  return `
+    <div class="badgerow">
+      <span class="badge">번역 버전 <b>${esc(rel.tag_name)}</b></span>
+      ${gv?`<span class="badge">게임 버전 <b>${esc(gv)}</b></span>`:""}
+    </div>
+    <div class="meta">
+      <span>📅 ${fmtDate(rel.published_at)}</span>
+      ${a?`<span>💾 ${fmtSize(a.size)}</span>`:""}
+      ${a&&a.download_count?`<span>⬇ ${a.download_count.toLocaleString()}회</span>`:""}
+    </div>`;
+}
+
 function render(releases){
   // 드래프트 제외
   releases = releases.filter(r=>!r.draft);
@@ -188,35 +216,53 @@ function render(releases){
 
   if(!releases.length){ showError("아직 등록된 릴리스가 없습니다."); return; }
 
-  // 최신
-  const latest = releases[0];
-  const a = pickAsset(latest);
-  const gv = gameVer(latest);
-  document.getElementById("latestBody").innerHTML = `
-    <div class="badgerow">
-      <span class="badge">번역 버전 <b>${esc(latest.tag_name)}</b></span>
-      ${gv?`<span class="badge">게임 버전 <b>${esc(gv)}</b></span>`:""}
-      ${latest.prerelease?`<span class="badge" style="border-color:#b8472f"><b>사전배포</b></span>`:""}
-    </div>
-    <div class="meta">
-      <span>📅 ${fmtDate(latest.published_at)}</span>
-      ${a?`<span>💾 ${fmtSize(a.size)}</span>`:""}
-      ${a&&a.download_count?`<span>⬇ ${a.download_count.toLocaleString()}회</span>`:""}
-    </div>
-    ${a?`<a class="dlbtn" href="${a.browser_download_url}">⬇ 최신 버전 다운로드</a>`
-        :`<a class="dlbtn" href="${RELEASES_WEB}" target="_blank">릴리스 페이지에서 받기</a>`}
-    ${latest.body?`<div class="notes">${esc(latest.body)}</div>`:""}
-  `;
+  // 최신 정식 / 최신 사전배포(정식보다 새것일 때만)
+  const stableIdx = releases.findIndex(r=>!r.prerelease);
+  const preIdx    = releases.findIndex(r=>r.prerelease);
+  const stable = stableIdx>=0 ? releases[stableIdx] : null;
+  const pre    = (preIdx>=0 && (stableIdx<0 || preIdx<stableIdx)) ? releases[preIdx] : null;
 
-  // 이전
-  const prev = releases.slice(1);
+  // 정식 최신 카드
+  const lb=document.getElementById("latestBody");
+  if(stable){
+    const a=pickAsset(stable);
+    lb.innerHTML = `
+      ${relInfo(stable)}
+      ${a?`<a class="dlbtn" href="${a.browser_download_url}">⬇ 최신 버전 다운로드</a>`
+          :`<a class="dlbtn" href="${RELEASES_WEB}" target="_blank">릴리스 페이지에서 받기</a>`}
+      ${stable.body?`<div class="notes">${esc(stable.body)}</div>`:""}
+    `;
+  } else {
+    lb.innerHTML = `<div class="loading">정식 버전이 아직 없습니다.${pre?" 아래 사전배포 버전을 이용해주세요.":""}</div>`;
+  }
+
+  // 사전배포 카드 (정식보다 새 프리릴리즈가 있을 때만 표시)
+  const pc=document.getElementById("preCard");
+  if(pre){
+    const a=pickAsset(pre);
+    document.getElementById("preBody").innerHTML = `
+      <p class="prenote">게임 업데이트에 맞춰 자동 생성된 최신 패치입니다. 검토가 끝나면 정식 버전으로 전환됩니다.
+      최신 게임 버전용 패치가 바로 필요하면 이 버전을 받아주세요.</p>
+      ${relInfo(pre)}
+      ${a?`<a class="dlbtn pre" href="${a.browser_download_url}">⬇ 사전배포 버전 다운로드</a>`
+          :`<a class="dlbtn pre" href="${RELEASES_WEB}" target="_blank">릴리스 페이지에서 받기</a>`}
+      ${pre.body?`<div class="notes">${esc(pre.body)}</div>`:""}
+    `;
+    pc.classList.remove("hidden");
+  } else {
+    pc.classList.add("hidden");
+  }
+
+  // 이전 버전 (위 두 카드에 표시된 것 제외)
+  const shownIds = new Set([stable&&stable.id, pre&&pre.id].filter(Boolean));
+  const prev = releases.filter(r=>!shownIds.has(r.id));
   const pb=document.getElementById("prevBody");
   if(!prev.length){ pb.innerHTML=`<div class="loading">이전 버전이 없습니다.</div>`; return; }
   pb.innerHTML = `<ul class="vlist">${prev.map(r=>{
     const pa=pickAsset(r); const pv=gameVer(r);
     return `<li>
       <div class="vinfo">
-        <span class="vt">${esc(r.tag_name)}</span>
+        <span class="vt">${esc(r.tag_name)}</span>${r.prerelease?`<span class="pretag">사전배포</span>`:""}
         <span class="vsub">· ${fmtDate(r.published_at)}${pv?` · 게임 ${esc(pv)}`:""}${pa?` · ${fmtSize(pa.size)}`:""}</span>
       </div>
       ${pa?`<a class="mini" href="${pa.browser_download_url}">다운로드</a>`
@@ -230,6 +276,7 @@ function showError(msg){
     <a href="${RELEASES_WEB}" target="_blank" rel="noopener">👉 GitHub 릴리스 페이지에서 직접 받기</a></div>`;
   document.getElementById("latestBody").innerHTML=html;
   document.getElementById("prevBody").innerHTML="";
+  document.getElementById("preCard").classList.add("hidden");
   document.getElementById("ghLink").href=RELEASES_WEB;
   const inq=document.getElementById("inquiryLink");
   if(CONFIG.inquiryUrl){inq.href=CONFIG.inquiryUrl;} else {inq.classList.add("hidden");}
